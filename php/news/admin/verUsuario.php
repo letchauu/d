@@ -1,11 +1,7 @@
 <?php
-
- include("verifica.php");
-
+       include ("verifica.php");
+   include ("../banco/conexao.php");
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -91,20 +87,29 @@
                 </div>
                 <div class="col-md-9 border-start border-1">
                     <p><a href="frmCadastrarUsuarios.php" class="btn btn-secondary">Cadastrar usuários</a> <a href="listarUsuarios.php" class="btn btn-secondary">Listar usuários</a> <a href="frmCadastrarNoticias.php" class="btn btn-secondary">Cadastrar notícias</a> <a href="listarNoticias.php" class="btn btn-secondary">Listar notícias</a></p>
-                    <h2>Cadastro de Usuários</h2>
-                    <div class="col">
-                        <form action="inserirUsuarios.php" method="post">
-                            <label for="nomeCompleto" class="form-label">Nome Completo</label>
-                            <input type="text" name="nome" id="nome" class="form-control"><br>
-                            <label for="E-mail" class="form-label">E-mail</label>
-                            <input type="email" name="email" id="email" class="form-control"><br>
-                            <label for="login" class="form-label">Login</label><br>
-                            <input type="text" name="login" id="login" class="form-control"><br>
-                            <label for="senha" class="form-label">Senha</label>
-                            <input type="password" name="pwd" id="pwd" class="form-control"><br><br>
-                            <button type="submit" name="cadastroUsuario" class="btn btn-secondary">Cadastrar</button>
-                        </form>
-                    </div>
+                    <h2>Ver Usuários</h2>
+                    <?php
+                        if(isset($_GET['idUsuario'])) {
+                            $usuario_id = mysqli_real_escape_string($conexao, $_GET['idUsuario']);
+                            $sql = "SELECT * FROM usuarios WHERE idUsuario = '$usuario_id'";
+                            $query = mysqli_query($conexao, $sql);
+
+                            if (mysqli_num_rows($query) > 0) {
+                                $usuario = mysqli_fetch_array($query);
+                    ?>
+                                <!---HTML--->
+                                <div class="row g-3">
+                                     <div class="col-sm">
+                                        <label for="nomeUsuario" class="form-label"> Nome Completo </label>
+                                        <p class="form-control"><?= $usuario['nomeUsuario']?></p>
+                            </div>
+                            </div>
+                    <?php
+                            } else {
+                                echo "<h5>Usuário não encontrado!</h5>";
+                            }
+                           }
+                    ?>
                 </div>
             </div>
 

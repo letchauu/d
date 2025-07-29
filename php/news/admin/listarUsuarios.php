@@ -1,11 +1,7 @@
 <?php
-
- include("verifica.php");
-
+   include ("verifica.php");
+   include ("../banco/conexao.php");
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -89,22 +85,52 @@
                     <h2>Painel administrativo</h2>
                     <h3>Olá, <?php echo $_SESSION['login']; ?> </h3><a href="logout.php" class="btn btn-outline-secondary">Sair</a><br>
                 </div>
-                <div class="col-md-9 border-start border-1">
+                <div class="col-md-9 border-start border-1 text-center">
                     <p><a href="frmCadastrarUsuarios.php" class="btn btn-secondary">Cadastrar usuários</a> <a href="listarUsuarios.php" class="btn btn-secondary">Listar usuários</a> <a href="frmCadastrarNoticias.php" class="btn btn-secondary">Cadastrar notícias</a> <a href="listarNoticias.php" class="btn btn-secondary">Listar notícias</a></p>
-                    <h2>Cadastro de Usuários</h2>
-                    <div class="col">
-                        <form action="inserirUsuarios.php" method="post">
-                            <label for="nomeCompleto" class="form-label">Nome Completo</label>
-                            <input type="text" name="nome" id="nome" class="form-control"><br>
-                            <label for="E-mail" class="form-label">E-mail</label>
-                            <input type="email" name="email" id="email" class="form-control"><br>
-                            <label for="login" class="form-label">Login</label><br>
-                            <input type="text" name="login" id="login" class="form-control"><br>
-                            <label for="senha" class="form-label">Senha</label>
-                            <input type="password" name="pwd" id="pwd" class="form-control"><br><br>
-                            <button type="submit" name="cadastroUsuario" class="btn btn-secondary">Cadastrar</button>
-                        </form>
-                    </div>
+                    <!--LISTA--> 
+                    <h2>Usuários Cadastrados</h2>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Login</th>
+                                <th>Senha</th>
+                                <th>Ações</th>
+                            </tr>    
+                        </thead>   
+                        <tboby>
+                            <?php
+                                 $sql = "SELECT * FROM usuarios";
+                                 $usuarios = mysqli_query($conexao, $sql);
+                                 if (mysqli_num_rows($usuarios) > 0) {
+                                    foreach($usuarios as $usuario) {    
+                                   
+                            ?>    
+                            <tr>
+                                <td><?= $usuario['idUsuario']?></td>
+                                <td><?= $usuario['nomeUsuario']?></td>
+                                <td><?= $usuario['emailUsuario']?></td>
+                                <td><?= $usuario['loginUsuario']?></td>
+                                <td><?= "...".substr($usuario['senhaUsuario'], 10, 8)."..."?></td>
+                                <td>
+                                    <a href="verUsuario.php?idUsuario=<?= $usuario['idUsuario']?>" class="btn btn-secondary btn-sm">Ver</a>
+                                    <a href="editarUsuario.php?idUsuario=<?= $usuario['idUsuario']?>" class="btn btn-success btn-sm">Editar</a>
+                                    <form action="frmApagarUsuario.php" method="post">
+                                        <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" 
+                                        name="apagarUsuario" value="<?= $usuario['idUsuario']?>" class="btn btn-danger btn-sm">Excluir</button>
+                                    </form>
+                                </td> 
+                            </tr>
+                            <?php
+                                 }
+                                } else {
+                                    echo "<h5>Nenhum usuário cadastrado</h5";
+                                }
+                                ?>
+                        </tbody>        
+                    </table>
                 </div>
             </div>
 
