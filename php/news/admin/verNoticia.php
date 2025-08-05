@@ -87,44 +87,38 @@
                 </div>
                 <div class="col-md-9 border-start border-1">
                     <p><a href="frmCadastrarUsuarios.php" class="btn btn-secondary">Cadastrar usuários</a> <a href="listarUsuarios.php" class="btn btn-secondary">Listar usuários</a> <a href="frmCadastrarNoticias.php" class="btn btn-secondary">Cadastrar notícias</a> <a href="listarNoticias.php" class="btn btn-secondary">Listar notícias</a></p>
-                    <h2>Ver Usuários</h2>
+                    <h2>Ver Notícias</h2>
                     <?php
-                        if(isset($_GET['idUsuario'])) {
-                            $usuario_id = mysqli_real_escape_string($conexao, $_GET['idUsuario']);
-                            $sql = "SELECT * FROM usuarios WHERE idUsuario = '$usuario_id'";
+                        if(isset($_GET['idNoticia'])) {
+                            $noticia_id = mysqli_real_escape_string($conexao, $_GET['idNoticia']);
+                            $sql = "SELECT * FROM noticias WHERE idNoticia = '$noticia_id'";
                             $query = mysqli_query($conexao, $sql);
 
                             if (mysqli_num_rows($query) > 0) {
-                                $usuario = mysqli_fetch_array($query);
+                                $noticia = mysqli_fetch_array($query);
                     ?>
                                 <!---HTML--->
                                 <div class="row g-3">
                                      <div class="col-sm">
-                                        <label for="nomeUsuario" class="form-label"> Nome Completo </label>
-                                        <p class="form-control"><?= $usuario['nomeUsuario']?></p>
+                                        <label for="tituloNoticia" class="form-label">Título da Notícia </label>
+                                        <p class="form-control"><?= $noticia['tituloNoticia']?></p>
                             </div>
                             </div>
-                             <div class="row g-3">
+                            <div class="row g-3">
                                     <div class="col-sm">
-                                        <label for="emailUsuario" class="form-label">E-mail</label>
-                                        <p class="form-control"><?= $usuario['emailUsuario']?></p>
+                                        <label for="textoNoticia" class="form-label">Texto da Notícia</label>
+                                        <p class="form-control"><?= substr($noticia['textoNoticia'],0 ,100)."..."?></p>
                                     </div>
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-sm">
-                                        <label for="loginUsuario" class="form-label">Login</label>
-                                        <p class="form-control"><?= $usuario['loginUsuario']?></p>
-                                    </div>
-                                </div>
-                                <div class="row g-3">
-                                    <div class="col-sm">
-                                        <label for="senhaUsuario" class="form-label">Senha</label>
-                                        <p class="form-control"><?= "...".substr($usuario['senhaUsuario'], 10, 8)."..."?></p>
+                                        <label for="fotoNoticia" class="form-label">Foto da Notícia</label>
+                                        <p class="form-control"><img src="<?= $noticia['fotoNoticia']?>" width="200px"></p>
                                     </div>
                                 </div>
                     <?php
                             } else {
-                                echo "<h5>Usuário não encontrado!</h5>";
+                                echo "<h5>Notícia não encontrada!</h5>";
                             }
                            }
                     ?>

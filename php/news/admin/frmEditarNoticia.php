@@ -1,5 +1,5 @@
 <?php
-       include ("verifica.php");
+   include ("verifica.php");
    include ("../banco/conexao.php");
 ?>
 <!DOCTYPE html>
@@ -85,49 +85,56 @@
                     <h2>Painel administrativo</h2>
                     <h3>Olá, <?php echo $_SESSION['login']; ?> </h3><a href="logout.php" class="btn btn-outline-secondary">Sair</a><br>
                 </div>
-                <div class="col-md-9 border-start border-1">
+                <div class="col-md-9 border-start border-1
+                ">
                     <p><a href="frmCadastrarUsuarios.php" class="btn btn-secondary">Cadastrar usuários</a> <a href="listarUsuarios.php" class="btn btn-secondary">Listar usuários</a> <a href="frmCadastrarNoticias.php" class="btn btn-secondary">Cadastrar notícias</a> <a href="listarNoticias.php" class="btn btn-secondary">Listar notícias</a></p>
-                    <h2>Ver Usuários</h2>
-                    <?php
-                        if(isset($_GET['idUsuario'])) {
-                            $usuario_id = mysqli_real_escape_string($conexao, $_GET['idUsuario']);
-                            $sql = "SELECT * FROM usuarios WHERE idUsuario = '$usuario_id'";
-                            $query = mysqli_query($conexao, $sql);
+                    <h2>Editar Notícias</h2>
+                <?php
+                    if (isset($_SESSION['mensagem_erro'])) {
+                        echo "<div class='alert alert-danger'>".$_SESSION['mensagem_erro']."</div>";
+                        unset($_SESSION['mensagem_erro']);
+                    }
+                      if (isset($_GET['idNoticia'])) {
+                        $noticia_id = mysqli_real_escape_string($conexao, $_GET['idNoticia']);
+                        $sql = "SELECT * FROM noticias WHERE idNoticia = '$noticia_id'";
+                        $query = mysqli_query($conexao, $sql);
 
-                            if (mysqli_num_rows($query) > 0) {
-                                $usuario = mysqli_fetch_array($query);
-                    ?>
-                                <!---HTML--->
-                                <div class="row g-3">
-                                     <div class="col-sm">
-                                        <label for="nomeUsuario" class="form-label"> Nome Completo </label>
-                                        <p class="form-control"><?= $usuario['nomeUsuario']?></p>
-                            </div>
-                            </div>
-                             <div class="row g-3">
-                                    <div class="col-sm">
-                                        <label for="emailUsuario" class="form-label">E-mail</label>
-                                        <p class="form-control"><?= $usuario['emailUsuario']?></p>
-                                    </div>
-                                </div>
-                                <div class="row g-3">
-                                    <div class="col-sm">
-                                        <label for="loginUsuario" class="form-label">Login</label>
-                                        <p class="form-control"><?= $usuario['loginUsuario']?></p>
-                                    </div>
-                                </div>
-                                <div class="row g-3">
-                                    <div class="col-sm">
-                                        <label for="senhaUsuario" class="form-label">Senha</label>
-                                        <p class="form-control"><?= "...".substr($usuario['senhaUsuario'], 10, 8)."..."?></p>
-                                    </div>
-                                </div>
-                    <?php
-                            } else {
-                                echo "<h5>Usuário não encontrado!</h5>";
-                            }
-                           }
-                    ?>
+                        if (mysqli_num_rows($query) > 0) {
+                            $noticia = mysqli_fetch_array($query);
+                ?>
+                <!--HTML-->
+                <form action="editarNoticia.php" method="post">
+                    <input type="hidden" name="idNoticia" value="<?= $noticia['idNoticia'] ?>">
+                    <div class="row g-3">
+                        <div class="col-sm">
+                            <label for="tituloNoticia" class="form-label">Título da Notícia</label>
+                            <input type="text" class="form-control" name="tituloNoticia"
+                            id="tituloNoticia" value="<?= $noticia['tituloNoticia'] ?>">
+                        </div>
+                    </div>
+                     <div class="row g-3">
+                        <div class="col-sm">
+                            <label for="textoNoticia" class="form-label">Texto da Notícia</label>
+                            <input type="text" class="form-control" name="textoNoticia"
+                            id="textoNoticia" value="<?= $noticia['textoNoticia'] ?>">
+                        </div>
+                    </div>
+                     <div class="row g-3">
+                        <div class="col-sm">
+                            <label for="fotoNoticia" class="form-label">Foto da Notícia</label>
+                            <input type="file" name="fotoNoticia" id="fotoNoticia" class="form-control" accept="image/png, image/jpeg"><br>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" name="editarNoticia" class="btn btn-success mt-3">Editar</button>
+                </form>
+                <?php
+                        } else {
+                            echo "<h5>Notícia não encontrada</h5>";
+                        }
+                      }   
+                ?>
+
                 </div>
             </div>
 

@@ -89,6 +89,13 @@
                     <p><a href="frmCadastrarUsuarios.php" class="btn btn-secondary">Cadastrar usuários</a> <a href="listarUsuarios.php" class="btn btn-secondary">Listar usuários</a> <a href="frmCadastrarNoticias.php" class="btn btn-secondary">Cadastrar notícias</a> <a href="listarNoticias.php" class="btn btn-secondary">Listar notícias</a></p>
                     <!--LISTA--> 
                     <h2>Notícias Cadastradas</h2>
+                        <?php
+                            if (isset($_SESSION['mensagem_sucesso'])) {
+                        echo "<div class='alert alert-success'>".$_SESSION['mensagem_sucesso']."</div>";
+                        unset($_SESSION['mensagem_sucesso']);
+                    }
+                    ?>
+
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
